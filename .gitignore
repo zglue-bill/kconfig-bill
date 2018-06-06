@@ -1,2 +1,21 @@
-kconfig
+*.swp
+*.swo
+*.rej
+*.orig
+*.a
+*.o
+*.lo
+*.la
+*.pc
+.deps
+.libs
+.dirstamp
+frontends/kconfig
+*/[mngq]conf/kconfig-[mnqg]conf
+*/conf/kconfig-conf
+Makefile
+libtool
+scripts/.autostuff/stamp-h1
+utils/kconfig-gettext
+utils/kconfig-tweak
 
