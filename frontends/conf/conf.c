@@ -35,6 +35,7 @@ enum input_mode {
 	savedefconfig,
 	listnewconfig,
 	olddefconfig,
+        help,
 } input_mode = oldaskconfig;
 
 static int indent = 1;
@@ -466,6 +467,7 @@ static struct option long_opts[] = {
 	 * value but not 'n') with the counter-intuitive name.
 	 */
 	{"oldnoconfig",     no_argument,       NULL, olddefconfig},
+        {"help",            no_argument,       NULL, help},
 	{NULL, 0, NULL, 0}
 };
 
@@ -550,6 +552,10 @@ int main(int ac, char **av)
 		case listnewconfig:
 		case olddefconfig:
 			break;
+                case help:
+                        conf_usage(progname);
+                        exit(0);
+                        break;
 		case '?':
 			conf_usage(progname);
 			exit(1);
@@ -646,6 +652,8 @@ int main(int ac, char **av)
 	}
 
 	switch (input_mode) {
+        case help:
+		break;
 	case allnoconfig:
 		conf_set_all_new_symbols(def_no);
 		break;
