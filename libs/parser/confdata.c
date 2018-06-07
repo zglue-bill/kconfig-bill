@@ -16,6 +16,16 @@
 
 #include "lkc.h"
 
+#define BUFSZ 64
+static char cwdir[BUFSZ];
+#define PWD()  {  \
+        if (getcwd(cwdir, BUFSZ) == NULL)       \
+        {                                       \
+                strerror(errno);                \
+        }                                       \
+        printf("CWD: %s\n", cwdir);             \
+}
+
 struct conf_printer {
 	void (*print_symbol)(FILE *, struct symbol *, const char *, void *);
 	void (*print_comment)(FILE *, const char *, void *);
@@ -975,6 +985,7 @@ int conf_write_autoconf(void)
 		return 1;
 	}
 
+PWD();
 	out_h = fopen(".tmpconfig.h", "w");
 	if (!out_h) {
 		fclose(out);
@@ -982,6 +993,8 @@ int conf_write_autoconf(void)
 		return 1;
 	}
 
+printf("==== A::a\n");
+PWD();
 	conf_write_heading(out, &kconfig_printer_cb, NULL);
 
 	conf_write_heading(tristate, &tristate_printer_cb, NULL);
@@ -1009,11 +1022,16 @@ int conf_write_autoconf(void)
 		name = "include/generated/autoconf.h";
 	if (rename(".tmpconfig.h", name))
 		return 1;
+
+PWD();
+printf("==== A::b\n");
 	name = getenv("KCONFIG_TRISTATE");
 	if (!name)
 		name = "include/config/tristate.conf";
 	if (rename(".tmpconfig_tristate", name))
 		return 1;
+PWD();
+printf("==== A::c\n");
 	name = conf_get_autoconfig_name();
 	/*
 	 * This must be the last step, kbuild has a dependency on auto.conf
@@ -1022,6 +1040,8 @@ int conf_write_autoconf(void)
 	if (rename(".tmpconfig", name))
 		return 1;
 
+PWD();
+printf("==== A::d\n");
 	return 0;
 }
 
